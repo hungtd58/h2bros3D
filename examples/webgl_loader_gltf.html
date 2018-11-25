@@ -220,7 +220,7 @@
 			camera.position.set(1043, 208, -1203);
 
 			controls = new THREE.OrbitControls(camera);
-			controls.target.set(50, 50, 100);
+			controls.target.set(50, 0, -50);
 			controls.update();
 
 			// function onPositionChange(o) {
@@ -233,16 +233,29 @@
 			// controls.addEventListener('change', onPositionChange);
 
 			// envmap
-			var path = 'textures/cube/skybox/';
-			var format = '.jpg';
-			var envMap = new THREE.CubeTextureLoader().load([
-				path + 'px' + format, path + 'nx' + format,
-				path + 'py' + format, path + 'ny' + format,
-				path + 'pz' + format, path + 'nz' + format
+			// var path = 'textures/cube/MilkyWay/';
+			// var format = '.jpg';
+			// var envMap = new THREE.CubeTextureLoader().load([
+			// 	path + 'dark-s_px' + format, path + 'dark-s_nx' + format,
+			// 	path + 'dark-s_py' + format, path + 'dark-s_ny' + format,
+			// 	path + 'dark-s_pz' + format, path + 'nz' + format
+			// ]);
+
+			// scene = new THREE.Scene();
+			// scene.background = envMap;
+
+			var cubeTextureLoader = new THREE.CubeTextureLoader();
+
+			cubeTextureLoader.setPath('textures/cube/skybox/');
+
+			var cubeTexture = cubeTextureLoader.load([
+				'px.jpg', 'nx.jpg',
+				'py.jpg', 'ny.jpg',
+				'pz.jpg', 'nz.jpg',
 			]);
 
 			scene = new THREE.Scene();
-			scene.background = envMap;
+			scene.background = cubeTexture;
 
 			light = new THREE.HemisphereLight(0xbbbbff, 0x444422);
 			light.position.set(0, 10000, 0);
@@ -256,10 +269,10 @@
 
 					if (child.isMesh) {
 
-						child.material.envMap = envMap;
+						child.material.envMap = cubeTexture;
 
 					}
-					child.position.z = -9.1;
+					child.position.x = 0; child.position.y = 0; child.position.z = 0;
 
 				});
 
