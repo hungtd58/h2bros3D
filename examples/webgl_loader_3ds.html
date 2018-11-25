@@ -61,11 +61,11 @@
 
 				//3ds files dont store normal maps
 				var loader = new THREE.TextureLoader();
-				var normal = loader.load( 'models/3ds/portalgun/textures/normal.jpg' );
+				var normal = loader.load( './Water_Po.jpg' );
 
 				var loader = new THREE.TDSLoader( );
-				loader.setResourcePath( 'models/3ds/portalgun/textures/' );
-				loader.load( 'models/3ds/portalgun/portalgun.3ds', function ( object ) {
+				loader.setResourcePath( './3ds/textures/' );
+				loader.load( './3ds/Residential Buildings 001.3ds', function ( object ) {
 
 					object.traverse( function ( child ) {
 

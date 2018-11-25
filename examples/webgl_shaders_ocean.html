@@ -32,6 +32,7 @@
 
 		<script src="../build/three.js"></script>
 
+		<script src="js/loaders/ColladaLoader.js"></script>
 		<script src="js/controls/OrbitControls.js"></script>
 		<script src="js/objects/Water.js"></script>
 		<script src="js/objects/Sky.js"></script>
@@ -79,6 +80,28 @@
 
 				light = new THREE.DirectionalLight( 0xffffff, 0.8 );
 				scene.add( light );
+
+				var loader = new THREE.ColladaLoader();
+				loader.load( 'CityA2.dae', function ( collada ) {
+
+					// var animations = collada.animations;
+					var avatar = collada.scene;
+					avatar.traverse( function ( node ) {
+
+						if ( node.isSkinnedMesh ) {
+
+							node.frustumCulled = false;
+
+						}
+
+					} );
+
+					mixer = new THREE.AnimationMixer( avatar );
+					// var action = mixer.clipAction( animations[ 0 ] ).play();
+
+					scene.add( avatar );
+
+				} );
 
 				// Water
 
@@ -168,16 +191,16 @@
 
 				geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
 
-				var material = new THREE.MeshStandardMaterial( {
-					vertexColors: THREE.VertexColors,
-					roughness: 0.0,
-					flatShading: true,
-					envMap: cubeCamera.renderTarget.texture,
-					side: THREE.DoubleSide
-				} );
+				// var material = new THREE.MeshStandardMaterial( {
+				// 	vertexColors: THREE.VertexColors,
+				// 	roughness: 0.0,
+				// 	flatShading: true,
+				// 	envMap: cubeCamera.renderTarget.texture,
+				// 	side: THREE.DoubleSide
+				// } );
 
-				sphere = new THREE.Mesh( geometry, material );
-				scene.add( sphere );
+				// sphere = new THREE.Mesh( geometry, material );
+				// scene.add( sphere );
 
 				//
 
@@ -185,7 +208,7 @@
 				controls.maxPolarAngle = Math.PI * 0.495;
 				controls.target.set( 0, 10, 0 );
 				controls.minDistance = 40.0;
-				controls.maxDistance = 200.0;
+				controls.maxDistance = 1200.0;
 				camera.lookAt( controls.target );
 
 				//
@@ -237,9 +260,9 @@
 
 				var time = performance.now() * 0.001;
 
-				sphere.position.y = Math.sin( time ) * 20 + 5;
-				sphere.rotation.x = time * 0.5;
-				sphere.rotation.z = time * 0.51;
+				// sphere.position.y = Math.sin( time ) * 20 + 5;
+				// sphere.rotation.x = time * 0.5;
+				// sphere.rotation.z = time * 0.51;
 
 				water.material.uniforms.time.value += 1.0 / 60.0;
 

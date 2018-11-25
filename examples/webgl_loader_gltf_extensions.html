@@ -101,10 +101,10 @@
 				},
 				Duck: {
 					name: 'Duck',
-					url: './models/gltf/Duck/%s/Duck.gltf',
+					url: './gltfdemo/scene.gltf',
 					author: 'Sony',
 					authorURL: 'https://www.playstation.com/en-us/corporate/about/',
-					cameraPos: new THREE.Vector3( 0, 3, 5 ),
+					cameraPos: new THREE.Vector3( 100, 100, 200 ),
 					addLights: true,
 					addGround: true,
 					shadows: true,
@@ -208,7 +208,7 @@
 					scene.add( directionalLight );
 
 					spot1 = new THREE.SpotLight( 0xffffff, 1 );
-					spot1.position.set( 5, 10, 5 );
+					spot1.position.set( 500, 1000, 500 );
 					spot1.angle = 0.50;
 					spot1.penumbra = 0.75;
 					spot1.intensity = 100;
