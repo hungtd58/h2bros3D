@@ -195,6 +195,7 @@
 	<script src="js/WebGL.js"></script>
 	<script src="js/libs/stats.min.js"></script>
 	<script src="js/libs/dat.gui.min.js"></script>
+	<script src="js/loaders/DRACOLoader.js"></script>
 
 	<script>
 
@@ -263,7 +264,9 @@
 
 			// model
 			var loader = new THREE.GLTFLoader();
-			loader.load('gltfdemo/scene.gltf', function (gltf) {
+			THREE.DRACOLoader.setDecoderPath('js/libs/draco/');
+			loader.setDRACOLoader(new THREE.DRACOLoader());
+			loader.load('draco/TestDraco.gltf', function (gltf) {
 
 				gltf.scene.traverse(function (child) {
 
