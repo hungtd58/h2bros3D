@@ -61,7 +61,7 @@
 				container = document.getElementById( 'container' );
 
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 2000 );
-				camera.position.set( 8, 10, 8 );
+				camera.position.set( 1000, 1000, 2000 );
 				camera.lookAt( 0, 3, 0 );
 
 				scene = new THREE.Scene();
@@ -79,7 +79,7 @@
 				// collada
 
 				var loader = new THREE.ColladaLoader( loadingManager );
-				loader.load( './models/collada/elf/elf.dae', function ( collada ) {
+				loader.load( 'Q1.dae', function ( collada ) {
 
 					elf = collada.scene;
 

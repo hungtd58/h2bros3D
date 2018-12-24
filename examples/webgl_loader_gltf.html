@@ -218,7 +218,7 @@
 			document.body.appendChild(container);
 
 			camera = new THREE.PerspectiveCamera(10, window.innerWidth / window.innerHeight, 0.25, 10000);
-			camera.position.set(1043, 208, -1203);
+			camera.position.set(100, 100, 1000);
 
 			controls = new THREE.OrbitControls(camera);
 			controls.target.set(50, 0, -50);
@@ -266,7 +266,7 @@
 			var loader = new THREE.GLTFLoader();
 			THREE.DRACOLoader.setDecoderPath('js/libs/draco/');
 			loader.setDRACOLoader(new THREE.DRACOLoader());
-			loader.load('draco/TestDraco.gltf', function (gltf) {
+			loader.load('./Q2_Meshlab.glb', function (gltf) {
 
 				gltf.scene.traverse(function (child) {
 
