@@ -184,14 +184,15 @@
 						// 		child.material.envMap = background;
 						// 	}
 						// } );
+						
 						scene.add( gltf.scene );
 
-						var mroot = gltf.scene;
-						var bbox = new THREE.Box3().setFromObject(mroot);
-						var cent = bbox.getCenter(new THREE.Vector3());
-						var size = bbox.getSize(new THREE.Vector3());
+						// var mroot = gltf.scene;
+						// var bbox = new THREE.Box3().setFromObject(mroot);
+						// var cent = bbox.getCenter(new THREE.Vector3());
+						// var size = bbox.getSize(new THREE.Vector3());
 
-						console.log(size);
+						// console.log(size);
 
 						//Rescale the object to normalized space
 						// var maxAxis = Math.max(size.x, size.y, size.z);
