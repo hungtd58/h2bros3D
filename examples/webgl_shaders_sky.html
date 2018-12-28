@@ -41,11 +41,17 @@
 
 		<script src="../build/three.js"></script>
 
-		<script src="js/controls/OrbitControls.js"></script>
 		<script src="js/objects/Sky.js"></script>
+		<script src="js/libs/dat.gui.min.js"></script>
+
+		
+
+		<script src="js/controls/OrbitControls.js"></script>
+		<script src="js/loaders/GLTFLoader.js"></script>
 
 		<script src="js/WebGL.js"></script>
-		<script src="js/libs/dat.gui.min.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+		<script src="js/loaders/DRACOLoader.js"></script>
 
 		<script>
 
@@ -55,7 +61,7 @@
 
 			}
 
-			var camera, controls, scene, renderer;
+			var camera, controls, scene, renderer, container;
 
 			var sky, sunSphere;
 
@@ -66,7 +72,7 @@
 
 				// Add Sky
 				sky = new THREE.Sky();
-				sky.scale.setScalar( 450000 );
+				sky.scale.setScalar( 4500000 );
 				scene.add( sky );
 
 				// Add Sun Helper
@@ -74,7 +80,7 @@
 					new THREE.SphereBufferGeometry( 20000, 16, 8 ),
 					new THREE.MeshBasicMaterial( { color: 0xffffff } )
 				);
-				sunSphere.position.y = - 700000;
+				sunSphere.position.y = - 7000000;
 				sunSphere.visible = false;
 				scene.add( sunSphere );
 
@@ -82,16 +88,16 @@
 
 				var effectController  = {
 					turbidity: 10,
-					rayleigh: 2,
-					mieCoefficient: 0.005,
-					mieDirectionalG: 0.8,
-					luminance: 1,
-					inclination: 0.49, // elevation / inclination
-					azimuth: 0.25, // Facing front,
+					rayleigh: 1.8,
+					mieCoefficient: 0.05,
+					mieDirectionalG: 0.6,
+					luminance: 1.1,
+					inclination: 0.27, // elevation / inclination
+					azimuth: 0.35, // Facing front,
 					sun: ! true
 				};
 
-				var distance = 400000;
+				var distance = 4000000;
 
 				function guiChanged() {
 
@@ -133,32 +139,103 @@
 			}
 
 			function init() {
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 100, 10000000 );
+				camera.position.set( 800000, 106000, -70000 );
+				camera.setLens(20);
 
-				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 100, 2000000 );
-				camera.position.set( 0, 100, 2000 );
+				// camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 100, 2000000 );
+				// camera.position.set( 0, 100, 2000 );
 
 				//camera.setLens(20);
 
 				scene = new THREE.Scene();
 
-				var helper = new THREE.GridHelper( 10000, 2, 0xffffff, 0xffffff );
-				scene.add( helper );
+				// var helper = new THREE.GridHelper( 10000, 2, 0xffffff, 0xffffff );
+				// scene.add( helper );
 
-				renderer = new THREE.WebGLRenderer();
+				var loader = new THREE.GLTFLoader();
+				THREE.DRACOLoader.setDecoderPath('js/libs/draco/');
+				loader.setDRACOLoader(new THREE.DRACOLoader());
+
+				
+				light = new THREE.HemisphereLight( 0xbbbbff, 0x444422 );
+				light.position.set( 0, 1000000, 0 );
+				scene.add( light );
+
+				var glbList = [
+					"models/blender/20181227/Q2_1_draco.glb",
+					"models/blender/20181227/Q2_2_draco.glb",
+					"models/blender/20181227/Q2_3_draco.glb",
+					"models/blender/20181227/Q2_4_draco.glb",
+					"models/blender/20181227/Q2_5_draco.glb",
+					"models/blender/20181227/Q2_6_draco.glb",
+					"models/blender/20181227/Q2_7_draco.glb",
+					// "models/blender/20181227/Q2_8_draco.glb",
+					// "models/blender/20181227/Q2_9_draco.glb",
+				];
+
+				for (var i = 0; i < glbList.length; i++) {
+					loader.load(glbList[i], function (gltf) {
+					// loader.load('models/blender/Q2_Draco_Compress_V2/kokura_castle/scene.gltf', function (gltf) {
+						// gltf.scene.traverse( function ( child ) {
+						// 	if ( child.isMesh ) {
+						// 		child.material.envMap = background;
+						// 	}
+						// } );
+						scene.add( gltf.scene );
+
+						var mroot = gltf.scene;
+						var bbox = new THREE.Box3().setFromObject(mroot);
+						var cent = bbox.getCenter(new THREE.Vector3());
+						var size = bbox.getSize(new THREE.Vector3());
+
+						console.log(size);
+
+						//Rescale the object to normalized space
+						// var maxAxis = Math.max(size.x, size.y, size.z);
+						// mroot.scale.multiplyScalar(1.0 / maxAxis);
+						// bbox.setFromObject(mroot);
+						// bbox.getCenter(cent);
+						// bbox.getSize(size);
+						// //Reposition to 0,halfY,0
+						// mroot.position.copy(cent).multiplyScalar(-1);
+						// mroot.position.y-= (size.y * 0.5);
+					}, undefined, function ( e ) {
+						console.error( e );
+					} );
+				}
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
-				document.body.appendChild( renderer.domElement );
+				renderer.gammaOutput = true;
+				container.appendChild( renderer.domElement );
 
 				controls = new THREE.OrbitControls( camera, renderer.domElement );
 				controls.addEventListener( 'change', render );
-				//controls.maxPolarAngle = Math.PI / 2;
-				controls.enableZoom = false;
-				controls.enablePan = false;
+				controls.maxPolarAngle = Math.PI / 2;
+				controls.enableZoom = true;
+				controls.enablePan = true;
+				controls.target.set( 290797.4672665216, 0, -440774.32066681056 );
+				controls.update();
 
 				initSky();
+				// stats
+				stats = new Stats();
+				container.appendChild( stats.dom );
 
+				function animate() {
+
+					renderer.render( scene, camera );
+					stats.update();
+					requestAnimationFrame( animate );
+				}
+
+				animate();
+				render();
 				window.addEventListener( 'resize', onWindowResize, false );
-
 			}
 
 			function onWindowResize() {

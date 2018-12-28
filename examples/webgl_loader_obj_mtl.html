@@ -90,23 +90,49 @@
 
 				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 
-				new THREE.MTLLoader()
-					.setPath( 'obj/' )
-					.load( 'Center_City_Sci-Fi.mtl', function ( materials ) {
+				var objList = [
+					"models/optimize/Q2_1_face.obj",
+					"models/optimize/Q2_2_face.obj",
+					"models/optimize/Q2_3_face.obj",
+					"models/optimize/Q2_4_face.obj",
+					"models/optimize/Q2_5_face.obj",
+					"models/optimize/Q2_6_face.obj",
+					"models/optimize/Q2_7_face.obj",
+					"models/optimize/Q2_8_face.obj",
+					"models/optimize/Q2_9_face.obj",
+				];
+
+				var mtlList = [
+					"models/optimize/Q2_1_face.mtl",
+					"models/optimize/Q2_2_face.mtl",
+					"models/optimize/Q2_3_face.mtl",
+					"models/optimize/Q2_4_face.mtl",
+					"models/optimize/Q2_5_face.mtl",
+					"models/optimize/Q2_6_face.mtl",
+					"models/optimize/Q2_7_face.mtl",
+					"models/optimize/Q2_8_face.mtl",
+					"models/optimize/Q2_9_face.mtl",
+				];
+
+				for (var i = 0; i < objList.length; i++) {
+					new THREE.MTLLoader()
+					// .setPath( 'obj/' )
+					.load( mtlList[i], function ( materials ) {
 
 						materials.preload();
 
 						new THREE.OBJLoader()
 							.setMaterials( materials )
 							.setPath( 'obj/' )
-							.load( 'Center City Sci-Fi.obj', function ( object ) {
+							.load( objList[i], function ( object ) {
 
-								object.position.y = - 95;
+								// object.position.y = - 95;
 								scene.add( object );
 
 							}, onProgress, onError );
 
 					} );
+				}
 
 				//
 
